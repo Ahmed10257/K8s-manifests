@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: cluster-reader
+rules:
+- apiGroups: [ "" ]
+  resources: [ "pods", "nodes" ]
+  verbs: [ "get", "list", "watch" ]
+---
+
+
+# NOTES:
+# - ClusterRole can grant access to resources across all namespaces.
+# - Can also define non-namespaced permissions (e.g., nodes).
+# - Useful for cluster-wide controllers.

@@ -1,0 +1,34 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / # Example for NGINX Ingress
+spec:
+  ingressClassName: nginx # Which ingress controller to use
+  rules:
+  - host: myapp.example.com # Domain name
+    http:
+      paths:
+      - path: / # Path to match
+        pathType: Prefix # Prefix | Exact | ImplementationSpecific
+        backend:
+          service:
+            name: my-service # Target service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - myapp.example.com
+    secretName: tls-secret # Secret with TLS cert/key
+
+# Notes:
+# rules.host = domain.
+
+# pathType:
+# Prefix → /api matches /api/*.
+# Exact → must match exactly.
+
+# ImplementationSpecific → controller-dependent.
+
+# tls.secretName must contain tls.crt and tls.key.

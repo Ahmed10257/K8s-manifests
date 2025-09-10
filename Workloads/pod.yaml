@@ -1,0 +1,68 @@
+apiVersion: v1 # API group/version (for Pod it's always v1)
+kind: Pod # Object type
+metadata:
+  name: my-pod # Unique name in namespace
+  namespace: default # Namespace (default if omitted)
+  labels:
+    # Key/value pairs for grouping/selection
+    app: my-app
+  annotations:
+    # Arbitrary metadata (used by tools/controllers)
+    description: "Example pod"
+spec:
+  restartPolicy: Always # Always | OnFailure | Never (defaults to Always in Deployments)
+  terminationGracePeriodSeconds: 30 # Seconds to wait before killing container
+  nodeSelector:
+    # Schedule pod to nodes with these labels
+    disktype: ssd
+  tolerations:
+  # Allow scheduling onto tainted nodes
+  - key: "node-role.kubernetes.io/control-plane"
+    operator: "Exists"
+    effect: "NoSchedule"
+  affinity:
+    # Node/pod affinity rules (advanced scheduling)
+    nodeAffinity: {}
+    podAffinity: {}
+    podAntiAffinity: {}
+  containers:
+  # Main container list
+  - name: my-container
+    image: nginx:1.25 # Container image
+    imagePullPolicy: IfNotPresent # Always | IfNotPresent | Never
+    command: [ "/bin/sh" ] # Overrides ENTRYPOINT
+    args: [ "-c", "echo hello; sleep 3600" ] # Overrides CMD
+    env:
+    # Environment variables
+    - name: ENV_VAR
+      value: "value"
+    ports:
+    # Expose container ports
+    - name: http
+      containerPort: 80
+      protocol: TCP # TCP | UDP | SCTP
+    resources:
+      # CPU/Memory requests & limits
+      requests:
+        cpu: "100m" # 0.1 CPU core
+        memory: "128Mi"
+      limits:
+        cpu: "500m"
+        memory: "256Mi"
+    volumeMounts:
+    # Mount volumes inside container
+    - name: data-vol
+      mountPath: /data
+  initContainers:
+  # Containers that run before main ones
+  - name: init-myservice
+    image: busybox
+    command: [ "sh", "-c", "echo initializing..." ]
+  volumes:
+  # Volumes for containers to use
+  - name: data-vol
+    emptyDir: {} # Ephemeral volume type
+    # Other options: hostPath, persistentVolumeClaim, configMap, secret, etc.
+  imagePullSecrets:
+  # For private registries
+  - name: my-docker-secret

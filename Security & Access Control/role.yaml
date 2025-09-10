@@ -1,0 +1,16 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: default
+  name: pod-reader
+rules:
+- apiGroups: [ "" ] # "" indicates the core API group
+  resources: [ "pods" ]
+  verbs: [ "get", "list", "watch" ]
+---
+
+
+# NOTES:
+# - A Role defines fine-grained permissions within a single namespace.
+# - `apiGroups` can be "" (core), "apps", "batch", etc.
+# - `verbs` include: get, list, watch, create, update, patch, delete.

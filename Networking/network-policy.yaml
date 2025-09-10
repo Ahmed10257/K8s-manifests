@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: backend # Apply policy to Pods with this label
+  policyTypes:
+  - Ingress # Control incoming traffic
+  - Egress # Control outgoing traffic
+  ingress:
+  - from:
+    # Who can talk to backend Pods
+    - podSelector:
+        matchLabels:
+          app: frontend
+    ports:
+    - protocol: TCP
+      port: 80
+  egress:
+  - to:
+    # Where backend Pods can send traffic
+    - ipBlock:
+        cidr: 10.0.0.0/24
+        except:
+        - 10.0.0.5/32
+    ports:
+    - protocol: TCP
+      port: 3306

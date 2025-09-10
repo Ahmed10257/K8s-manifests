@@ -1,0 +1,31 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: my-vpa
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-deployment
+  updatePolicy:
+    updateMode: Auto # Off | Initial | Auto | Recreate
+  resourcePolicy:
+    containerPolicies:
+    - containerName: my-container
+      minAllowed:
+        cpu: "200m"
+        memory: "256Mi"
+      maxAllowed:
+        cpu: "2"
+        memory: "2Gi"
+
+# Notes:
+
+# Adjusts Pod resource requests/limits automatically.
+# updateMode:
+#   Off → recommendations only.
+#   Initial → set requests/limits only at Pod creation.
+#   Auto → actively update running Pods (may restart).
+#   Recreate → force restarts when needed.
+
+# Needs VPA admission controller installed (not default in clusters).

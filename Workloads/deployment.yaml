@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+  labels:
+    app: my-app
+spec:
+  replicas: 3 # Desired pod replicas
+  selector:
+    matchLabels:
+      app: my-app # MUST match pod template labels
+  strategy:
+    # Update strategy
+    type: RollingUpdate # RollingUpdate | Recreate
+    rollingUpdate:
+      maxUnavailable: 25% # Pods that can be unavailable during update
+      maxSurge: 25% # Extra pods allowed above desired replicas
+  minReadySeconds: 0 # Seconds a pod must be ready before considered available
+  revisionHistoryLimit: 10 # How many old ReplicaSets to keep
+  progressDeadlineSeconds: 600 # Deployment must progress within this time
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - name: my-container
+        image: nginx:1.25
+        ports:
+        - containerPort: 80

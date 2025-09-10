@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-psc
+spec:
+  securityContext:
+    runAsUser: 1000 # all containers run as this user
+    runAsGroup: 3000 # primary group
+    fsGroup: 2000 # group applied to mounted volumes
+  containers:
+  - name: secure-container
+    image: nginx
+---
+
+
+# NOTES:
+# - PodSecurityContext defines default security settings for all containers.
+# - Common fields: runAsUser, runAsGroup, fsGroup, seLinuxOptions, seccompProfile.
+# - Overrides at container SecurityContext take precedence.
+# - applied at Pod level, not per container.

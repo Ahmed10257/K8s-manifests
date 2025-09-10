@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: mem-cpu-limits
+  namespace: my-namespace
+spec:
+  limits:
+  - type: Container
+    max:
+      cpu: "2" # Max CPU per container
+      memory: 1Gi # Max memory per container
+    min:
+      cpu: "100m" # Min CPU per container
+      memory: 128Mi # Min memory per container
+    default:
+      cpu: "500m" # Default request if not specified
+      memory: 256Mi
+    defaultRequest:
+      cpu: "200m"
+      memory: 256Mi
+
+# Notes:
+#   Enforces per-container or per-Pod limits inside a namespace.
+#   Ensures containers don’t run without requests/limits.
+#   Works together with ResourceQuota.

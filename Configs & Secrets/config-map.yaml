@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: example-config
+data:
+  app.properties: | # multi-line key/value
+    app.name=MyApp
+    app.version=1.0
+  log_level: "DEBUG" # single-line key/value

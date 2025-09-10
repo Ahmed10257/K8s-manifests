@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service-nodeport
+spec:
+  type: NodePort # Exposes service on each Node’s IP
+  selector:
+    app: my-app
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80 # Service port (cluster-wide)
+    targetPort: 80 # Pod container port
+    nodePort: 30080 # Fixed external port (30000–32767)
